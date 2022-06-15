@@ -1,0 +1,24 @@
+{
+  "borderRadius": 1.0,
+  "padding": 1.0,
+  "colors": {
+    "primary": {
+      "fg00": "white",
+      "bg00": "#c62828",
+      "bg10": "#ff5f52",
+      "bg01": "#8e0000"
+    },
+    "secondary": {
+      "fg00": "black",
+      "bg00": "#ffea00",
+      "bg10": "#ffff56",
+      "bg01": "#c7b800"
+    },
+    "default": {
+      "fg00": "black",
+      "bg00": "#E1E2E1",
+      "bg10": "#F5F5F6",
+      "bg01": "#000101"
+    }
+  }
+}
