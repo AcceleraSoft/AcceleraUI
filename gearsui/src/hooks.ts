@@ -88,5 +88,5 @@ export function useDrag({ ref, initCoords = [0,0] }: UseDragOptions) {
     window.addEventListener('mouseup', onMouseUp);
     window.addEventListener('keydown', onKeyDown);
   }
-  return { startDrag, position };
+  return { startDrag, position, setPosition };
 }
