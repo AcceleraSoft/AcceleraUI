@@ -4,6 +4,7 @@
   "description": "A highly customizable React-based UI for buildoing complex apps",
   "main": "lib/index.js",
   "scripts": {
+    "dev:tsc": "tsc -w --preserveWatchOutput",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
