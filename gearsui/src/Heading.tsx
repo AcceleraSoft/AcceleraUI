@@ -23,13 +23,13 @@ export const Heading: React.FC<HeadingProps> = ({
         Component = 'h1';
         break;
       case 2:
-        Component = 'h1';
+        Component = 'h2';
         break;
       case 3:
-        Component = 'h1';
+        Component = 'h3';
         break;
       case 4:
-        Component = 'h1';
+        Component = 'h4';
         break;
       default:
         errorOnce(`Invalid level ${level} given to <Heading />. Will render a heading of level 1.`);
