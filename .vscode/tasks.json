@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev:tsc",
+			"path": "gearsui",
+			"problemMatcher": [],
+			"label": "Build Library",
+			"detail": "tsc -w --preserveWatchOutput"
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+			"path": "docs",
+			"problemMatcher": [],
+			"label": "Build Documentation",
+			"detail": "next dev"
+		},
+		{
+			"label": "Build",
+			"dependsOn": [
+				"Build Library",
+				"Build Documentation"
+			],
+			"detail": "Start building all sub-projects",
+			"problemMatcher": []
+		}
+	]
+}
