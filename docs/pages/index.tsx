@@ -3,19 +3,27 @@ import type { NextPage } from 'next'
 import Page from "../components/Page"
 
 import { Button, Heading } from "gearsui"
-import Link from 'next/link';
+import styled from '@emotion/styled'
+import Link from 'next/link'
 
-const components = [
-  { name: 'button', title: 'Button' },
-  { name: 'heading', title: 'Heading' },
-];
+const Hero = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+margin: auto;
+max-width: 50rem;
+min-height: 100vh;
+`
 
 const Home: NextPage = () => {
   return (
-    <Page title="GearsUI">
-      <Heading>The new standard for building highly interactive applications</Heading>
-      <Button primary>Learn more</Button>
-      {components.map(comp => <Link key={comp.name} href={`/component/${comp.name}`}><a>{comp.title}</a></Link>)}
+    <Page title="GearsUI" sidebar={false}>
+      <Hero>
+        <div style={{ textAlign: 'center' }}>
+          <Heading>The new standard for building highly interactive applications</Heading>
+          <Button primary render={props => <Link href="/docs"><a {...props}></a></Link>}>Learn more</Button>
+        </div>
+      </Hero>
     </Page>
   )
 }

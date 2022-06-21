@@ -1,7 +1,7 @@
 
 import Page from "../../components/Page"
 import Example from "../../components/Example"
-import { Button } from "gearsui";
+import { Button, Heading } from "gearsui";
 import { css } from "@emotion/react";
 import { NextPage } from "next";
 
@@ -17,6 +17,7 @@ justify-content: space-around ;
 const ButtonPage: NextPage = () => {
   return (
     <Page title="Button Component">
+      <Heading>Button</Heading>
       <Example title="Different Flavours">
         <div css={example01Css}>
           <Button primary>Primary</Button>

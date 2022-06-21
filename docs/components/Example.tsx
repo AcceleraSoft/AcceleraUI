@@ -14,14 +14,14 @@ background-color: ${props => props.theme.colors.default.bg00};
 `
 
 export interface ExampleProps {
-  title: string;
+  title?: string;
   children: React.ReactNode;
 }
 
 export const Example = ({ title, children }: ExampleProps) => {
   return (
     <>
-      <Title>{title}</Title>
+      {title && <Title>{title}</Title>}
       <Wrapper>
         {children}
       </Wrapper>
