@@ -1,6 +1,16 @@
 
 const emittedErrors = new Set<string>();
 
+export function clamp(x: number, min: number, max: number): number {
+  if (x < min) {
+    return min;
+  }
+  if (x > max) {
+    return max;
+  }
+  return x;
+}
+
 export function errorOnce(message: string) {
   if (emittedErrors.has(message)) {
     return;

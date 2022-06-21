@@ -33,4 +33,3 @@ export const Page: React.FC<PageProps> = ({ title, description, noPad, children 
 }
 
 export default Page;
-

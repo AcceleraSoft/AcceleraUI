@@ -16,14 +16,6 @@ export interface ButtonProps {
   render?: (props: ButtonInjectedProps) => React.ReactElement;
 }
 
-// const buttonCss = (theme: Theme) => css`
-// cursor: pointer;
-// font-size: 1rem;
-// border-radius: ${theme.borderRadius * 0.5}em;
-// border: 1px solid transparent;
-// padding: ${theme.padding * 0.5}em;
-// `;
-
 export const Button: React.FC<ButtonProps> = ({
   children,
   primary,
@@ -60,6 +52,17 @@ export const Button: React.FC<ButtonProps> = ({
   }
   cssProps.backgroundColor = colors.bg00;
   cssProps.color = colors.fg00;
+  cssProps['&:focus'] = {
+    border: '1px solid lightblue'
+  }
+  cssProps['&:hover'] = {
+    backgroundColor: colors.bg20,
+    color: colors.fg00,
+  }
+  cssProps['&:active'] = {
+    backgroundColor: colors.bg10,
+    color: colors.fg00,
+  }
   return render({
     css: cssProps, 
     children,
