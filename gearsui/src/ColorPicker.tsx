@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 import { convertRGBToCSS, parseRGBNumber, RGB_MAX, RGB_MIN } from "./colors";
 import { useDrag, useMeasured } from "./hooks";
+import { IntegerField } from "./IntegerField";
 import { clamp } from "./util";
 
 export interface ColorPickerProps {
@@ -70,9 +71,9 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ width, height ] = useMeasured(canvasRef);
-  const { startDrag, position: [x, y] } = useDrag({ ref: canvasRef })
+  const { startDrag, position: [x, y], setPosition } = useDrag({ ref: canvasRef })
 
-  let color;
+  let color, r, g, b;
   if (width > 0) {
     const i = Math.floor((x / (width+1)) * (GRADIENTS.length-1));
     console.log(i);
@@ -81,11 +82,21 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
     const step = width / (GRADIENTS.length-1);
     const k = (x - (i * step)) / step;
     console.log(k)
-    const r = Math.round(start[0] + (end[0] - start[0]) * k);
-    const g = Math.round(start[1] + (end[1] - start[1]) * k);
-    const b = Math.round(start[2] + (end[2] - start[2]) * k);
+    r = Math.round(start[0] + (end[0] - start[0]) * k);
+    g = Math.round(start[1] + (end[1] - start[1]) * k);
+    b = Math.round(start[2] + (end[2] - start[2]) * k);
     color = `rgb(${r}, ${g}, ${b})`;
     console.log(color)
+  }
+
+  const setRGB = (r: number, g: number, b: number) => {
+    for (let i = 0; i < GRADIENTS.length-1; i++) {
+      const start = GRADIENTS[i];
+      const end = GRADIENTS[i+1];
+      if ((start[0] <= r) && (r <= end[0])) {
+        setPosition();
+      }
+    }
   }
 
   useEffect(() => {
@@ -104,7 +115,14 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
         <VBar ref={canvasRef} />
         <Slider style={{ left: `${x}px` }} />
       </Wrapper>
-      <Preview style={{ backgroundColor: color }} />
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <Preview style={{ backgroundColor: color }} />
+        <div style={{ flex: '1 1 auto' }}>
+          <IntegerField min={0} max={255} value={r} onChange={e => { setRGB(e.value, g, b); }} />
+          <IntegerField min={0} max={255} value={g} onChange={e => { setRGB(r, e.value, b); }} />
+          <IntegerField min={0} max={255} value={b} onChange={e => { setRGB(r, g, e.value); }} />
+        </div>
+      </div>
     </>
   );
 }
