@@ -1,10 +1,8 @@
 
 import styled from "@emotion/styled";
-import { useEffect, useRef, useState } from "react";
-import { convertRGBToCSS, parseRGBNumber, RGB_MAX, RGB_MIN } from "./colors";
-import { useDrag, useMeasured } from "./hooks";
+import { useRef, useState } from "react";
+import { DragEvent, useDrag, useMeasured } from "./hooks";
 import { IntegerField } from "./IntegerField";
-import { clamp } from "./util";
 
 export interface ColorPickerProps {
   value?: string;
@@ -19,8 +17,20 @@ const vbarHeight = '1rem';
 const sliderHeight = '2rem';
 
 const VBar = styled.canvas`
+background: linear-gradient(
+  90deg,
+  hsl(0, 100%, 50%),
+  hsl(45, 100%, 50%),
+  hsl(90, 100%, 50%),
+  hsl(135, 100%, 50%),
+  hsl(180, 100%, 50%),
+  hsl(225, 100%, 50%),
+  hsl(270, 100%, 50%),
+  hsl(315, 100%, 50%),
+  hsl(360, 100%, 50%)
+);
 width: 100%;
-min-height: ${vbarHeight};
+height: ${vbarHeight};
 border-radius: ${props => `${props.theme.borderRadius * 1.0}em`}
 `
 
@@ -37,7 +47,7 @@ transform: translateX(-50%) translateY(calc(-0.5 * (${sliderHeight} - ${vbarHeig
 border-radius: ${props => `${props.theme.borderRadius * 1.0}em`};
 `
 
-const GRADIENTS = [
+const GRADIENTS: RGB[] = [
   [0xFF, 0, 0],
   [0xFF, 0xFF, 0],
   [0, 0xFF, 0],
@@ -48,66 +58,54 @@ const GRADIENTS = [
 ]
 
 const Preview = styled.div`
+position: relative;
 width: 6rem;
 height: 6rem;
+overflow: hidden;
 border-radius: ${props => `${props.theme.borderRadius * 1.0}em`};
 `
 
-function renderColors(canvas: HTMLCanvasElement, width: number, height: number) {
-  const ctx = canvas.getContext('2d')!;
-  const step = width / (GRADIENTS.length-1);
-  for (let i = 0; i < GRADIENTS.length-1; i++) {
-    const start = GRADIENTS[i];
-    const end = GRADIENTS[i+1];
-    const grad = ctx.createLinearGradient(i * step, 0, step * (i+1), 0)
-    grad.addColorStop(0, `rgb(${start[0]}, ${start[1]}, ${start[2]})`);
-    grad.addColorStop(1, `rgb(${end[0]}, ${end[1]}, ${end[2]})`);
-    ctx.fillStyle = grad;
-    ctx.fillRect(i * step, 0, step * (i+1), height);
-  }
-}
+const PreviewBackground = styled.div`
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image:
+  linear-gradient(45deg, gray 25%, transparent 25%), 
+  linear-gradient(-45deg, gray 25%, transparent 25%),
+  linear-gradient(45deg, transparent 75%, gray 75%),
+  linear-gradient(-45deg, transparent 75%, gray 75%);
+background-size: 2rem 2rem;
+background-position: 0 0, 0 1rem, 1rem -1rem, -1rem 0px;
+`
+
+const PreviewColor = styled.div`
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+`
+
+type RGB = [number, number, number];
+type HSL = [number, number, number, number];
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ width, height ] = useMeasured(canvasRef);
-  const { startDrag, position: [x, y], setPosition } = useDrag({ ref: canvasRef })
-
-  let color, r, g, b;
-  if (width > 0) {
-    const i = Math.floor((x / (width+1)) * (GRADIENTS.length-1));
-    console.log(i);
-    const start = GRADIENTS[i];
-    const end = GRADIENTS[i+1];
-    const step = width / (GRADIENTS.length-1);
-    const k = (x - (i * step)) / step;
-    console.log(k)
-    r = Math.round(start[0] + (end[0] - start[0]) * k);
-    g = Math.round(start[1] + (end[1] - start[1]) * k);
-    b = Math.round(start[2] + (end[2] - start[2]) * k);
-    color = `rgb(${r}, ${g}, ${b})`;
-    console.log(color)
-  }
-
-  const setRGB = (r: number, g: number, b: number) => {
-    for (let i = 0; i < GRADIENTS.length-1; i++) {
-      const start = GRADIENTS[i];
-      const end = GRADIENTS[i+1];
-      if ((start[0] <= r) && (r <= end[0])) {
-        setPosition();
-      }
+  const [color, setColor] = useState<HSL>([0,1.0,0.5,1.0]);
+  const [h, s, l, a] = color;
+  const x = h * width / 360;
+  const { startDrag } = useDrag({
+    ref: canvasRef,
+    onDrag(e: DragEvent) {
+      const [x, y] = e.position;
+      const h2 = (x / width) * 360;
+      setColor([h2, s, l, a])
     }
-  }
-
-  useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas = canvasRef.current;
-    canvas.width = width;
-    canvas.height = height;
-    renderColors(canvas, width, height);
-  }, [ canvasRef.current, width, height ]);
+  });
 
   return (
     <>
@@ -115,14 +113,19 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
         <VBar ref={canvasRef} />
         <Slider style={{ left: `${x}px` }} />
       </Wrapper>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <Preview style={{ backgroundColor: color }} />
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+        <Preview>
+          <PreviewBackground />
+          <PreviewColor style={{ backgroundColor: `hsl(${h}, ${s * 100}%, ${l * 100}%, ${a})`, marginRight: '1em' }} />
+        </Preview>
         <div style={{ flex: '1 1 auto' }}>
-          <IntegerField min={0} max={255} value={r} onChange={e => { setRGB(e.value, g, b); }} />
-          <IntegerField min={0} max={255} value={g} onChange={e => { setRGB(r, e.value, b); }} />
-          <IntegerField min={0} max={255} value={b} onChange={e => { setRGB(r, g, e.value); }} />
+          <IntegerField inline label="H" min={0} max={360} value={h} onChange={e => { setColor([e.value, s, l, a]); }} />
+          <IntegerField inline label="S" min={0} max={100} value={s * 100} onChange={e => { setColor([h, e.value / 100, l, a]); }} />
+          <IntegerField inline label="L" min={0} max={100} value={l * 100} onChange={e => { setColor([h, s, e.value / 100, a]); }} />
+          <IntegerField inline label="A" min={0} max={100} value={a * 100} onChange={e => { setColor([h, s, l, e.value / 100]); }} />
         </div>
       </div>
     </>
   );
+
 }

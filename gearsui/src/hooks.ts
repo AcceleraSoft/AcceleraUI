@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import React = require("react");
+import { useRef, useEffect, useMemo, useState } from "react";
 import { clamp } from "./util";
 
 export type Vec2 = [number, number];
@@ -48,10 +47,23 @@ export function useMeasured<E extends HTMLElement>(ref: React.RefObject<E>) {
 export interface UseDragOptions {
   ref: React.RefObject<HTMLElement>;
   initCoords?: Vec2;
+  onDrag?: (e: DragEvent) => void;
 }
 
-export function useDrag({ ref, initCoords = [0,0] }: UseDragOptions) {
-  const [position, setPosition] = useState(initCoords);
+export interface DragEvent {
+  position: Vec2;
+}
+
+export function useDrag({ ref, onDrag, initCoords = [0,0] }: UseDragOptions) {
+  const position = useRef(initCoords);
+  const setPosition = (newPosition: Vec2) => {
+    position.current = newPosition;
+    if (onDrag !== undefined) {
+      onDrag({
+        position: newPosition
+      })
+    }
+  }
   const updatePosition = (event: React.MouseEvent | MouseEvent) => {
     if (!ref.current) {
       return;
@@ -67,7 +79,7 @@ export function useDrag({ ref, initCoords = [0,0] }: UseDragOptions) {
     updatePosition(event);
   }
   const startDrag = (event: React.MouseEvent) => {
-    const savedPosition = position;
+    const savedPosition = position.current;
     updatePosition(event);
     const removeListeners = () => {
       window.removeEventListener('mousemove', onMouseMove);
@@ -88,5 +100,5 @@ export function useDrag({ ref, initCoords = [0,0] }: UseDragOptions) {
     window.addEventListener('mouseup', onMouseUp);
     window.addEventListener('keydown', onKeyDown);
   }
-  return { startDrag, position, setPosition };
+  return { startDrag };
 }
