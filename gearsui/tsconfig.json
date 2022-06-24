@@ -5,6 +5,7 @@
     "jsxImportSource": "@emotion/react",
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
