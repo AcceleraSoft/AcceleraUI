@@ -21,6 +21,7 @@ export interface TabsProps {
 
 const Labels = styled.div`
 display: flex;
+background-color: lightgray;
 `
 
 const Label = styled.div`
@@ -29,8 +30,15 @@ padding: 0.5rem;
 cursor: pointer;
 `
 
+const ActiveLabel = styled.div`
+padding: 0.5rem;
+cursor: normal;
+background-color: white;
+font-weight: normal;
+`
+
 const Wrapper = styled.div`
-border: 1px solid gray;
+border: 1px solid lightgray;
 `
 
 export const Tabs: React.FC<TabsProps> = ({ children }) => {
@@ -40,7 +48,7 @@ export const Tabs: React.FC<TabsProps> = ({ children }) => {
   return (
     <Wrapper>
       <Labels>
-        {childrenArray.map((child, i) => <Label onClick={() => setActiveIndex(i)}>{child.props.label}</Label>) }
+        {childrenArray.map((child, i) => i === activeIndex ? <ActiveLabel>{child.props.label}</ActiveLabel> : <Label onClick={() => setActiveIndex(i)}>{child.props.label}</Label>) }
       </Labels>
       {child}
     </Wrapper>
