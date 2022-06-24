@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useRef, useState } from "react";
 import { DragEvent, useDrag, useMeasured } from "./hooks";
 import { IntegerField } from "./IntegerField";
+import Tabs, { Tab } from "./Tabs";
 
 export interface ColorPickerProps {
   value?: string;
@@ -13,10 +14,10 @@ position: relative;
 margin: 1em 0;
 `
 
-const vbarHeight = '1rem';
-const sliderHeight = '2rem';
+const sliderBarHeight = '1rem';
+const sliderHandleHeight = '2rem';
 
-const VBar = styled.canvas`
+const SliderBar = styled.canvas`
 background: linear-gradient(
   90deg,
   hsl(0, 100%, 50%),
@@ -30,32 +31,22 @@ background: linear-gradient(
   hsl(360, 100%, 50%)
 );
 width: 100%;
-height: ${vbarHeight};
+height: ${sliderBarHeight};
 border-radius: ${props => `${props.theme.borderRadius * 1.0}em`}
 `
 
-const Slider = styled.div`
+const SliderHandle = styled.div`
 cursor: pointer;
 position: absolute;
 top: 0;
 left: 0;
-font-size: ${sliderHeight};
+font-size: ${sliderHandleHeight};
 width: 0.3em;
 height: 1em;
 border: 0.1em solid black;
-transform: translateX(-50%) translateY(calc(-0.5 * (${sliderHeight} - ${vbarHeight})));
+transform: translateX(-50%) translateY(calc(-0.5 * (${sliderHandleHeight} - ${sliderBarHeight})));
 border-radius: ${props => `${props.theme.borderRadius * 1.0}em`};
 `
-
-const GRADIENTS: RGB[] = [
-  [0xFF, 0, 0],
-  [0xFF, 0xFF, 0],
-  [0, 0xFF, 0],
-  [0, 0xFF, 0xFF],
-  [0, 0, 0xFF],
-  [0xFF, 0, 0xFF],
-  [0xFF, 0, 0],
-]
 
 const Preview = styled.div`
 position: relative;
@@ -63,6 +54,7 @@ width: 6rem;
 height: 6rem;
 overflow: hidden;
 border-radius: ${props => `${props.theme.borderRadius * 1.0}em`};
+margin-right: 1rem;
 `
 
 const PreviewBackground = styled.div`
@@ -109,22 +101,29 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
 
   return (
     <>
-      <Wrapper onMouseDown={startAreaDrag}>
-        <VBar ref={canvasRef} />
-        <Slider onMouseDown={startElementDrag} style={{ left: `${x}px` }} />
-      </Wrapper>
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-        <Preview>
-          <PreviewBackground />
-          <PreviewColor style={{ backgroundColor: `hsl(${h}, ${s * 100}%, ${l * 100}%, ${a})`, marginRight: '1em' }} />
-        </Preview>
-        <div style={{ flex: '1 1 auto' }}>
-          <IntegerField inline label="H" min={0} max={360} value={h} onChange={e => { setColor([e.value, s, l, a]); }} />
-          <IntegerField inline label="S" min={0} max={100} value={s * 100} onChange={e => { setColor([h, e.value / 100, l, a]); }} />
-          <IntegerField inline label="L" min={0} max={100} value={l * 100} onChange={e => { setColor([h, s, e.value / 100, a]); }} />
-          <IntegerField inline label="A" min={0} max={100} value={a * 100} onChange={e => { setColor([h, s, l, e.value / 100]); }} />
-        </div>
-      </div>
+      <Tabs>
+        <Tab label="HSL">
+          <Wrapper onMouseDown={startAreaDrag}>
+            <SliderBar ref={canvasRef} />
+            <SliderHandle onMouseDown={startElementDrag} style={{ left: `${x}px` }} />
+          </Wrapper>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+            <Preview>
+              <PreviewBackground />
+              <PreviewColor style={{ backgroundColor: `hsl(${h}, ${s * 100}%, ${l * 100}%, ${a})` }} />
+            </Preview>
+            <div style={{ flex: '1 1 auto' }}>
+              <IntegerField inline label="H" min={0} max={360} value={h} onChange={e => { setColor([e.value, s, l, a]); }} />
+              <IntegerField inline label="S" min={0} max={100} value={s * 100} onChange={e => { setColor([h, e.value / 100, l, a]); }} />
+              <IntegerField inline label="L" min={0} max={100} value={l * 100} onChange={e => { setColor([h, s, e.value / 100, a]); }} />
+              <IntegerField inline label="A" min={0} max={100} value={a * 100} onChange={e => { setColor([h, s, l, e.value / 100]); }} />
+            </div>
+          </div>
+        </Tab>
+        <Tab label="RGB">
+
+        </Tab>
+      </Tabs>
     </>
   );
 
