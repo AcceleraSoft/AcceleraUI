@@ -45,7 +45,7 @@ export function useMeasured<E extends HTMLElement>(ref: React.RefObject<E>) {
 }
 
 export interface UseDragOptions {
-  ref: React.RefObject<HTMLElement>;
+  areaRef: React.RefObject<HTMLElement>;
   initCoords?: Vec2;
   onDrag?: (e: DragEvent) => void;
 }
@@ -54,8 +54,9 @@ export interface DragEvent {
   position: Vec2;
 }
 
-export function useDrag({ ref, onDrag, initCoords = [0,0] }: UseDragOptions) {
+export function useDrag({ areaRef, onDrag, initCoords = [0,0] }: UseDragOptions) {
   const position = useRef(initCoords);
+  const offset = useRef([0, 0]);
   const setPosition = (newPosition: Vec2) => {
     position.current = newPosition;
     if (onDrag !== undefined) {
@@ -65,40 +66,48 @@ export function useDrag({ ref, onDrag, initCoords = [0,0] }: UseDragOptions) {
     }
   }
   const updatePosition = (event: React.MouseEvent | MouseEvent) => {
-    if (!ref.current) {
+    if (!areaRef.current) {
       return;
     }
-    const rect = ref.current.getBoundingClientRect();
+    const rect = areaRef.current.getBoundingClientRect();
     setPosition([
-      clamp(event.pageX - rect.x, 0, rect.width),
-      clamp(event.pageY - rect.y, 0, rect.height)
+      clamp(event.pageX - rect.x - offset.current[0], 0, rect.width),
+      clamp(event.pageY - rect.y - offset.current[1], 0, rect.height)
     ])
   }
   const onMouseMove = (event: MouseEvent) => {
     event.preventDefault();
     updatePosition(event);
   }
-  const startDrag = (event: React.MouseEvent) => {
+  const startAreaDrag = (event: React.MouseEvent) => {
     const savedPosition = position.current;
     updatePosition(event);
-    const removeListeners = () => {
+    const cleanup = () => {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
       window.removeEventListener('keyup', onKeyDown);
+      offset.current[0] = 0;
+      offset.current[1] = 0;
     }
     const onMouseUp = (event: MouseEvent) => {
-      removeListeners();
+      cleanup();
     }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
         setPosition(savedPosition);
-        removeListeners();
+        cleanup();
       }
     }
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp);
     window.addEventListener('keydown', onKeyDown);
   }
-  return { startDrag };
+  const startElementDrag = (event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    offset.current[0] = event.pageX - rect.x - rect.width / 2;
+    offset.current[1] = event.pageY - rect.y - rect.height / 2;
+    startAreaDrag(event);
+  }
+  return { startAreaDrag, startElementDrag };
 }

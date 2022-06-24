@@ -98,8 +98,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
   const [color, setColor] = useState<HSL>([0,1.0,0.5,1.0]);
   const [h, s, l, a] = color;
   const x = h * width / 360;
-  const { startDrag } = useDrag({
-    ref: canvasRef,
+  const { startElementDrag, startAreaDrag } = useDrag({
+    areaRef: canvasRef,
     onDrag(e: DragEvent) {
       const [x, y] = e.position;
       const h2 = (x / width) * 360;
@@ -109,9 +109,9 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
 
   return (
     <>
-      <Wrapper onMouseDown={startDrag}>
+      <Wrapper onMouseDown={startAreaDrag}>
         <VBar ref={canvasRef} />
-        <Slider style={{ left: `${x}px` }} />
+        <Slider onMouseDown={startElementDrag} style={{ left: `${x}px` }} />
       </Wrapper>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
         <Preview>
