@@ -2,18 +2,9 @@
 import styled from "@emotion/styled";
 import React, { TableHTMLAttributes, useState } from "react"
 
-export interface TabProps {
-  label: React.ReactNode;
-  children: React.ReactNode;
-}
-
 const TabContents = styled.div`
 padding: 1em;
 `
-
-export const Tab: React.FC<TabProps> = ({ label, children }) => {
-  return <TabContents>{children}</TabContents>;
-}
 
 export interface TabElement {
   key: string;
@@ -21,7 +12,7 @@ export interface TabElement {
   label: React.ReactNode;
 }
 
-export interface TabsProps {
+export interface TabsProps extends React.ComponentPropsWithoutRef<'div'> {
   elements: TabElement[];
 }
 
@@ -47,11 +38,11 @@ const Wrapper = styled.div`
 border: 1px solid lightgray;
 `
 
-export const Tabs: React.FC<TabsProps> = ({ elements }) => {
+export const Tabs: React.FC<TabsProps> = ({ elements, ...props }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const child = elements[activeIndex].render();
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <Labels>
         {elements.map((element, i) => i === activeIndex
           ? <ActiveLabel key={element.key}>{element.label}</ActiveLabel>

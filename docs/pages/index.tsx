@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       <Hero>
         <div style={{ textAlign: 'center' }}>
           <Heading>The new standard for building highly interactive applications</Heading>
-          <Button primary render={props => <Link href="/docs"><a {...props}></a></Link>}>Learn more</Button>
+          <Link href="/docs"><Button primary as="a" >Learn more</Button></Link>
         </div>
       </Hero>
     </Page>

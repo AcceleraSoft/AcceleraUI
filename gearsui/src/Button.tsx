@@ -1,11 +1,12 @@
 import { css, CSSObject, Theme, useTheme } from "@emotion/react";
+import React from "react";
 import { computeCorners, Corner } from "./util";
 
 export interface ButtonInjectedProps {
   
 }
 
-export interface ButtonProps {
+export type ButtonProps<T extends React.ElementType = 'button'> = React.ComponentPropsWithoutRef<T> & {
   children: React.ReactNode;
   primary?: boolean;
   secondary?: boolean;
@@ -13,19 +14,20 @@ export interface ButtonProps {
   left?: boolean;
   bottom?: boolean;
   right?: boolean;
-  render?: (props: ButtonInjectedProps) => React.ReactElement;
+  as?: T;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  children,
+export function Button<T extends React.ElementType = 'button'>({
   primary,
   secondary,
   top,
   left,
   bottom,
   right,
-  render = props => <button {...props} />,
-}) => {
+  as,
+  ...props
+}: ButtonProps<T>) {
+  const Component = as ?? 'button';
   const theme = useTheme();
   const corners = computeCorners(!!top, !!left, !!bottom, !!right);
   const radius = `${theme.borderRadius * 0.5}em`;
@@ -63,9 +65,5 @@ export const Button: React.FC<ButtonProps> = ({
     backgroundColor: colors.bg10,
     color: colors.fg00,
   }
-  return render({
-    css: cssProps, 
-    children,
-  });
+  return <Component css={cssProps} {...props} />
 }
-
