@@ -1,6 +1,6 @@
 
 import styled from "@emotion/styled";
-import React, { useState } from "react"
+import React, { TableHTMLAttributes, useState } from "react"
 
 export interface TabProps {
   label: React.ReactNode;
@@ -15,8 +15,14 @@ export const Tab: React.FC<TabProps> = ({ label, children }) => {
   return <TabContents>{children}</TabContents>;
 }
 
+export interface TabElement {
+  key: string;
+  render: () => React.ReactNode;
+  label: React.ReactNode;
+}
+
 export interface TabsProps {
-  children: React.ReactNode;
+  elements: TabElement[];
 }
 
 const Labels = styled.div`
@@ -41,16 +47,17 @@ const Wrapper = styled.div`
 border: 1px solid lightgray;
 `
 
-export const Tabs: React.FC<TabsProps> = ({ children }) => {
+export const Tabs: React.FC<TabsProps> = ({ elements }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const childrenArray = React.Children.toArray(children);
-  const child = childrenArray.filter((child, i) => activeIndex === i);
+  const child = elements[activeIndex].render();
   return (
     <Wrapper>
       <Labels>
-        {childrenArray.map((child, i) => i === activeIndex ? <ActiveLabel>{child.props.label}</ActiveLabel> : <Label onClick={() => setActiveIndex(i)}>{child.props.label}</Label>) }
+        {elements.map((element, i) => i === activeIndex
+          ? <ActiveLabel key={element.key}>{element.label}</ActiveLabel>
+          : <Label key={element.key} onClick={() => setActiveIndex(i)}>{element.label}</Label>) }
       </Labels>
-      {child}
+      <TabContents>{child}</TabContents>
     </Wrapper>
   )
 }
