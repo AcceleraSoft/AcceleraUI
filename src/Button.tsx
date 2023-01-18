@@ -1,5 +1,5 @@
-import { css, CSSObject, Theme, useTheme } from "@emotion/react";
-import React from "react";
+import { CSSObject } from "@emotion/react";
+import { useTheme } from "./theme"
 import { computeCorners, Corner } from "./util";
 
 export interface ButtonInjectedProps {
@@ -29,6 +29,7 @@ export function Button<T extends React.ElementType = 'button'>({
 }: ButtonProps<T>) {
   const Component = as ?? 'button';
   const theme = useTheme();
+  console.log(theme)
   const corners = computeCorners(!!top, !!left, !!bottom, !!right);
   const radius = `${theme.borderRadius * 0.5}em`;
   const cssProps: CSSObject = {
