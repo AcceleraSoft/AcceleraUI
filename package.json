@@ -1,7 +1,7 @@
 {
   "name": "gearsui",
   "version": "0.0.1",
-  "description": "A highly customizable React-based UI for buildoing complex apps",
+  "description": "A highly customizable React-based UI for building complex apps",
   "main": "lib/index.js",
   "scripts": {
     "dev:tsc": "tsc -w --preserveWatchOutput",
