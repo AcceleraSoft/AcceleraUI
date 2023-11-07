@@ -1,0 +1,41 @@
+
+.roundTopLeft {
+  border-top-left-radius: var(--border-radius);
+}
+
+.roundTopRight {
+  border-top-right-radius: var(--border-radius);
+}
+
+.roundBottomLeft {
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.roundBottomRight {
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.roundLeft {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.roundRight {
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.roundTop {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.roundBottom {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.roundXBottomLeft {
+  /* TODO */
+}
+
+.roundAll {
+  border-radius: var(--border-radius);
+}
+

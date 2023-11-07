@@ -1,0 +1,37 @@
+
+.input {
+  display: block;
+  flex: 1 0 100%;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid gray;
+  border-radius: 0.5em;
+  outline: none;
+}
+
+.toggle {
+  margin-left: -2rem;
+  cursor: pointer;
+  top: 0;
+  font-size: 1rem;
+  padding: 0.3rem;
+  right: 1rem;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  display: block;
+  margin: 0.5em ;
+  font-weight: bold;
+}
+
+.error {
+  color: darkred;
+  margin: 0.5rem 0;
+}

@@ -1,16 +1,6 @@
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
-import { useId } from "react";
-import { Theme } from "./theme";
 
-const inputCss = (theme: Theme) => css`
-display: block;
-margin: 0.5rem 0;
-font-size: 1rem;
-padding: 0.5rem;
-border-radius: ${theme.borderRadius * 0.5}rem;
-border: 1px solid ${theme.colors.default.bg00};
-`
+import { useId } from "react";
+import styles from "./IntegerField.module.css"
 
 export interface ChangeEvent {
   value: number;
@@ -26,35 +16,31 @@ export interface IntegerFieldProps {
   onChange?: (e: ChangeEvent) => void;
 }
 
-const inlineCss = css`
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-`
-
-const Label = styled.label`
-font-weight: bold;
-padding: 0.5rem;
-`
-
 export const IntegerField: React.FC<IntegerFieldProps> = ({
   inline,
   label,
+  min,
+  max,
   onChange,
   ...props
 }) => {
   const id = useId();
   const onInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = parseInt(e.currentTarget.value);
+    if ((min !== undefined && value < min) || (max !== undefined && value > max)) {
+      e.preventDefault();
+      return;
+    }
     if (onChange !== undefined) {
       onChange({
-        value: parseInt(e.currentTarget.value)
+        value,
       });
     }
   }
   return (
-    <div css={inline ? inlineCss : []}>
-      {label && <Label htmlFor={id}>{label}</Label>}
-      <input id={id} css={inputCss} type="number" {...props} onInput={onInput} />
+    <div className={inline ? styles.inline : ''}>
+      {label && <label className={styles.label} htmlFor={id}>{label}</label>}
+      <input id={id} className={styles.input} type="number" {...props} onInput={onInput} />
     </div>
   )
 }

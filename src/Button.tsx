@@ -1,6 +1,6 @@
-import { CSSObject } from "@emotion/react";
-import { useTheme } from "./theme"
+import { CSSProperties } from "react";
 import { computeCorners, Corner } from "./util";
+import styles from "./Button.module.css"
 
 export interface ButtonInjectedProps {
   
@@ -17,6 +17,10 @@ export type ButtonProps<T extends React.ElementType = 'button'> = React.Componen
   as?: T;
 }
 
+function getThemeParam(name: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue('--' + name);
+}
+
 export function Button<T extends React.ElementType = 'button'>({
   primary,
   secondary,
@@ -28,43 +32,18 @@ export function Button<T extends React.ElementType = 'button'>({
   ...props
 }: ButtonProps<T>) {
   const Component = as ?? 'button';
-  const theme = useTheme();
-  console.log(theme)
   const corners = computeCorners(!!top, !!left, !!bottom, !!right);
-  const radius = `${theme.borderRadius * 0.5}em`;
-  const cssProps: CSSObject = {
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    fontSize: '1rem',
-    padding: `${theme.padding * 0.5}em`,
-    borderRadius: [
-      corners & Corner.TopLeft ? radius : '0',
-      corners & Corner.TopRight ? radius : '0',
-      corners & Corner.BottomRight ? radius : '0',
-      corners & Corner.BottomLeft ? radius : '0',
-    ].join(' '),
-    border: '1px solid transparent',
-  }
-  let colors;
+  const style: CSSProperties = {};
+  const radius = getThemeParam('border-radius');
+  console.log(radius);
+  style.borderRadius = `${corners & Corner.TopLeft ? radius : '0'} ${corners & Corner.TopRight ? radius : '0'} ${corners & Corner.BottomRight ? radius : '0'} ${corners & Corner.BottomLeft ? radius : '0'}`;
+  let className = styles.button;
   if (primary) {
-    colors = theme.colors.primary;
+    className += ' ' + styles.buttonPrimary;
   } else if (secondary) {
-    colors = theme.colors.secondary;
+    className += ' ' + styles.buttonSecondary;
   } else {
-    colors = theme.colors.default;
+    className += ' ' + styles.buttonDefault;
   }
-  cssProps.backgroundColor = colors.bg00;
-  cssProps.color = colors.fg00;
-  cssProps['&:focus'] = {
-    border: '1px solid lightblue'
-  }
-  cssProps['&:hover'] = {
-    backgroundColor: colors.bg20,
-    color: colors.fg00,
-  }
-  cssProps['&:active'] = {
-    backgroundColor: colors.bg10,
-    color: colors.fg00,
-  }
-  return <Component css={cssProps} {...props} />
+  return <Component className={className} style={style} {...props} />
 }
