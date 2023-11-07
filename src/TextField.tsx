@@ -1,14 +1,10 @@
-import { css, withEmotionCache } from "@emotion/react";
 import React, { CSSProperties, useId, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./TextField.module.css"
-import { useTheme } from "./theme"
-import { computeCorners, Corner } from "./util";
-
-const inputCss = css`
-`
+import { computeCorners } from "./util";
+import { getBorderRadiusClassName } from "./common";
 
 export interface TextFieldChangeEvent {
   value: string;
@@ -40,7 +36,8 @@ export const TextField: React.FC<TextFieldProps> = ({
   right = false
 }) => {
 
-  let corners = computeCorners(top, left, bottom, right);
+  const corners = computeCorners(top, left, bottom, right);
+  const rounded = getBorderRadiusClassName(corners);
 
   const fieldId = useId();
 
@@ -59,11 +56,7 @@ export const TextField: React.FC<TextFieldProps> = ({
     }
   }
 
-  const theme = useTheme();
-
   const inputStyle = {} as CSSProperties;
-  const radius = `${theme.borderRadius * 0.5}rem`;
-  inputStyle.borderRadius = `${corners & Corner.TopLeft ? radius : '0'} ${corners & Corner.TopRight ? radius : '0'} ${corners & Corner.BottomRight ? radius : '0'} ${corners & Corner.BottomLeft ? radius : '0'}`;
   if (error) {
     inputStyle.borderColor = 'red';
   }
@@ -74,7 +67,7 @@ export const TextField: React.FC<TextFieldProps> = ({
       {false}
       {label && <label key="label" className={styles.label} htmlFor={fieldId}>{label}</label>}
       <div className={styles.wrapper}>
-        <input key="input" id={fieldId} className={styles.input} style={inputStyle} type={type} onInput={onInput} value={value} />
+        <input key="input" id={fieldId} className={styles.input + ' ' + rounded} style={inputStyle} type={type} onInput={onInput} value={value} />
         {password && <FontAwesomeIcon key="toggle" className={styles.toggle} icon={passwordVisible ? faEyeSlash : faEye} onClick={() => setPasswordVisible(v => !v)} />}
       </div>
       {error && <div className={styles.error}>{error}</div>}
