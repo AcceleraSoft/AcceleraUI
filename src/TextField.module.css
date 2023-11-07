@@ -10,6 +10,10 @@
   outline: none;
 }
 
+.input:focus {
+  border-color: black;
+}
+
 .toggle {
   margin-left: -2rem;
   cursor: pointer;
