@@ -1,27 +1,9 @@
-import styled from "@emotion/styled"
-import { useRef } from "react";
+import { CSSProperties, useRef } from "react";
 import { DragEvent, useDrag, useMeasured } from "./hooks";
+import styles from "./Slider.module.css";
 
 const handleHeight = '2rem';
 const barHeight = '1rem';
-
-const Wrapper = styled.div`
-position: relative;
-`
-
-const Bar = styled.div`
-background-color: lightgray;
-border-radius: ${props => `${props.theme.borderRadius * 1.0}em`}
-`
-
-const Handle = styled.div`
-cursor: pointer;
-position: absolute;
-top: 0;
-left: 0;
-border: 0.1em solid black;
-border-radius: ${props => `${props.theme.borderRadius * 1.0}em`};
-`
 
 export interface SliderChangeEvent {
   value: number;
@@ -29,24 +11,23 @@ export interface SliderChangeEvent {
 
 export interface SliderProps {
   size?: string;
-  horizontal?: boolean;
   vertical?: boolean;
   min?: number;
   max?: number;
   step?: number;
   value: number;
-  onChange?: (e: SliderChangeEvent) => void;
+  onUpdate?: (value: number) => void;
 }
 
-export const Slider: React.FC<SliderProps> = ({
+export function Slider({
   size = '1rem',
   min = 0,
   max = 100,
   step,
   value,
-  vertical,
-  onChange,
-}) => {
+  vertical = false,
+  onUpdate,
+}: SliderProps) {
 
   const barRef = useRef<HTMLDivElement>(null);
   const [ width, height ] = useMeasured(barRef)
@@ -55,28 +36,28 @@ export const Slider: React.FC<SliderProps> = ({
   const { startElementDrag, startAreaDrag } = useDrag({
     areaRef: barRef,
     onDrag(e: DragEvent) {
-      if (onChange !== undefined) {
+      if (onUpdate !== undefined) {
         const [x, y] = e.position;
         let newValue = min + ((vertical ? y : x) / elementSize) * (max - min);
         if (step !== undefined) {
           newValue = Math.round(newValue / step) * step
         }
-        onChange({ value: newValue });
+        onUpdate(newValue);
       }
     }
   });
 
   const handleSize = `calc(${size} * 2)`;
 
-  const barCss = {} as React.CSSProperties;
+  const barCss = {} as CSSProperties;
   if (vertical) {
     barCss.width = size;
-    barCss.minHeight = '2rem';
+    barCss.minHeight = '4rem';
   } else {
     barCss.height = size;
   }
 
-  const handleCss = {} as React.CSSProperties;
+  const handleCss = {} as CSSProperties;
   handleCss.fontSize = handleSize;
   if (vertical) {
     handleCss.height = '0.3em';
@@ -91,10 +72,10 @@ export const Slider: React.FC<SliderProps> = ({
   }
 
   return (
-    <Wrapper style={{ margin: `${size} 0` }}>
-      <Bar ref={barRef} style={barCss} onMouseDown={startAreaDrag} />
-      <Handle style={handleCss} onMouseDown={startElementDrag} />
-    </Wrapper>
+    <div className={styles.wrapper} style={{ margin: `${size} 0` }}>
+      <div className={styles.bar} ref={barRef} style={barCss} onMouseDown={startAreaDrag} />
+      <div className={styles.handle} style={handleCss} onMouseDown={startElementDrag} />
+    </div>
   );
 
 }

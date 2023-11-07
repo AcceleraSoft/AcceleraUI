@@ -1,0 +1,20 @@
+
+.wrapper {
+  position: relative;
+}
+
+.bar {
+  background-color: lightgray;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.handle {
+  cursor: pointer;
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  border: 0.1em solid black;
+  border-radius: var(--border-radius);
+}
