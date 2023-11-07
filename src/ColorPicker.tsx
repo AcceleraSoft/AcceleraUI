@@ -8,6 +8,7 @@ import styles from "./ColorPicker.module.css"
 
 export interface ColorPickerProps {
   value?: string;
+  onUpdate?: (color: Color) => void;
 }
 
 // const Wrapper = styled.div`
@@ -126,7 +127,7 @@ function HSLField({ value: [h, s, l], onUpdate }: HSLFieldProps) {
   );
 }
 
-export const ColorPicker: React.FC<ColorPickerProps> = ({ value }) => {
+export function ColorPicker({ value, onUpdate }: ColorPickerProps) {
 
   const initColor = createHSL(0,1.0,0.5);
   const [color, setColor] = useState<Color>(initColor);
