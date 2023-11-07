@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es2020",
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
     "module": "commonjs",
     "resolveJsonModule": true,
     "moduleResolution": "node",
