@@ -9,9 +9,20 @@
   flex-wrap: wrap;
 }
 
+.wrapperCommon {
+  flex: none;
+  padding: 1rem;
+  border: 1px solid lightgray;
+  border-right: none;
+}
+
+.wrapperSpecific {
+  flex: 1 1 auto;
+}
+
 .sliderWrapper {
   position: relative;
-  margin: 1em 0;
+  margin: 1rem 0;
 }
 
 .sliderBar {
@@ -39,15 +50,14 @@
   box-sizing: border-box;
   top: 0;
   left: 0;
-  font-size: var(--color-slider-handle-height);
-  width: 0.3em;
-  height: 1em;
-  border: 0.1em solid black;
+  width: 0.4rem;
+  height: var(--color-slider-handle-height);
+  border: 0.1rem solid black;
   transform: translateX(-50%) translateY(calc(-0.5 * (var(--color-slider-handle-height) - var(--color-slider-bar-height))));
   border-radius: var(--border-radius);
 }
 
-.preview {
+.wrapperPreview {
   position: relative;
   width: 6rem;
   height: 6rem;

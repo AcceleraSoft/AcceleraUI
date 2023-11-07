@@ -1,11 +1,15 @@
 
-.input {
-  display: block;
+.block {
   margin: 0.5rem 0;
-  font-size: 1rem;
-  padding: 0.5rem;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--fg-default-200);
+}
+
+.block input {
+  width: 100%;
+}
+
+.block label {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .inline {
@@ -14,7 +18,23 @@
   align-items: center;
 }
 
+.inline input {
+  margin: 0.5rem 0;
+}
+
+.input {
+  display: block;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--fg-default-200);
+}
+
 .label {
+  display: block;
+  flex: none;
   font-weight: bold;
   padding: 0.5rem;
 }
