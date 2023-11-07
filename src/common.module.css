@@ -1,41 +1,53 @@
 
-.roundTopLeft {
+.roundA {
   border-top-left-radius: var(--border-radius);
 }
 
-.roundTopRight {
+.roundB {
   border-top-right-radius: var(--border-radius);
 }
 
-.roundBottomLeft {
-  border-bottom-left-radius: var(--border-radius);
-}
-
-.roundBottomRight {
+.roundC {
   border-bottom-right-radius: var(--border-radius);
 }
 
-.roundLeft {
+.roundD {
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.roundAD {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
-.roundRight {
+.roundBC {
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
-.roundTop {
+.roundAB {
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.roundBottom {
+.roundCD {
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-.roundXBottomLeft {
-  /* TODO */
+.roundBCD {
+  border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
 }
 
-.roundAll {
+.roundACD {
+  border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+}
+
+.roundABD {
+  border-radius: var(--border-radius) var(--border-radius) 0 var(--border-radius);
+}
+
+.roundABC {
+  border-radius: var(--border-radius) var(--border-radius) var(--border-radius) 0;
+}
+
+.roundABCD {
   border-radius: var(--border-radius);
 }
 

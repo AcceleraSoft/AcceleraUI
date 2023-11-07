@@ -33,9 +33,6 @@ export const enum Corner {
 
 export function computeCorners(top: boolean, left: boolean, bottom: boolean, right: boolean) {
   let corners = Corner.All;
-  if (top && left && bottom && right) {
-    return Corner.None;
-  }
   if (top) {
     corners &= ~Corner.Top;
   }

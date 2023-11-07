@@ -1,6 +1,8 @@
 import { CSSProperties } from "react";
-import { computeCorners, Corner } from "./util";
+import { computeCorners } from "./util";
+import "./theme.css"
 import styles from "./Button.module.css"
+import { getBorderRadiusClassName } from "./common";
 
 export interface ButtonInjectedProps {
   
@@ -17,10 +19,6 @@ export type ButtonProps<T extends React.ElementType = 'button'> = React.Componen
   as?: T;
 }
 
-function getThemeParam(name: string): string {
-  return getComputedStyle(document.documentElement).getPropertyValue('--' + name);
-}
-
 export function Button<T extends React.ElementType = 'button'>({
   primary,
   secondary,
@@ -33,11 +31,9 @@ export function Button<T extends React.ElementType = 'button'>({
 }: ButtonProps<T>) {
   const Component = as ?? 'button';
   const corners = computeCorners(!!top, !!left, !!bottom, !!right);
+  const round = getBorderRadiusClassName(corners);
   const style: CSSProperties = {};
-  const radius = getThemeParam('border-radius');
-  console.log(radius);
-  style.borderRadius = `${corners & Corner.TopLeft ? radius : '0'} ${corners & Corner.TopRight ? radius : '0'} ${corners & Corner.BottomRight ? radius : '0'} ${corners & Corner.BottomLeft ? radius : '0'}`;
-  let className = styles.button;
+  let className = styles.button + ' ' + round;
   if (primary) {
     className += ' ' + styles.buttonPrimary;
   } else if (secondary) {
