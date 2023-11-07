@@ -1,0 +1,26 @@
+
+.tabContents {
+  padding: 1rem;
+}
+
+.labels {
+  display: flex;
+  background-color: lightgray;
+}
+
+.label {
+  font-weight: bold;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.activeLabel {
+  padding: 0.5rem;
+  cursor: normal;
+  background-color: white;
+  font-weight: normal;
+}
+
+.wrapper {
+  border: 1px solid lightgray;
+}

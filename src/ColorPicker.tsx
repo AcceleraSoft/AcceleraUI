@@ -5,7 +5,6 @@ import { DragEvent, useDrag, useMeasured } from "./hooks";
 import { IntegerField } from "./IntegerField";
 import Tabs from "./Tabs";
 import styles from "./ColorPicker.module.css"
-import { withEmotionCache } from "@emotion/react";
 
 export interface ColorPickerProps {
   value?: string;
