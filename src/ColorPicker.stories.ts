@@ -1,6 +1,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 
+import "./theme.css"
 import { ColorPicker } from './ColorPicker';
 
 const meta = {

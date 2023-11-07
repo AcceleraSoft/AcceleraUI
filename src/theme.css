@@ -1,0 +1,14 @@
+
+:root {
+  font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+  --border-radius: 0.5rem;
+  --bg-primary-200: rgb(254 202 202);
+  --bg-primary-300: rgb(252 165 165);
+  --bg-primary-400: rgb(248 113 113);
+  --bg-secondary-200: rgb(254 240 138);
+  --bg-secondary-300: rgb(253 224 71);
+  --bg-secondary-400: rgb(250 204 21);
+  --bg-default-200: rgb(231 229 228);
+  --bg-default-300: rgb(214 211 209);
+  --bg-default-400: rgb(168 162 158);
+}

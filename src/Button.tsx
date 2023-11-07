@@ -1,6 +1,5 @@
 import { CSSProperties } from "react";
 import { computeCorners } from "./util";
-import "./theme.css"
 import styles from "./Button.module.css"
 import { getBorderRadiusClassName } from "./common";
 
