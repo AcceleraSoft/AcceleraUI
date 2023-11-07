@@ -27,6 +27,12 @@ export const WithError: Story = {
   }
 }
 
+export const WithPlaceholder: Story = {
+  args: {
+    placeholder: 'Enter your text here ...',
+  }
+}
+
 export const Password: Story = {
   args: {
     password: true,

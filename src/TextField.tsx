@@ -15,6 +15,7 @@ export interface TextFieldProps {
   label?: React.ReactNode;
   email?: boolean;
   password?: boolean;
+  placeholder?: string;
   onChange?: (e: TextFieldChangeEvent) => void;
   error?: React.ReactNode;
   top?: boolean;
@@ -29,6 +30,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   password,
   value,
   onChange,
+  placeholder,
   error,
   top = false,
   left = false,
@@ -67,7 +69,7 @@ export const TextField: React.FC<TextFieldProps> = ({
       {false}
       {label && <label key="label" className={styles.label} htmlFor={fieldId}>{label}</label>}
       <div className={styles.wrapper}>
-        <input key="input" id={fieldId} className={styles.input + ' ' + rounded} style={inputStyle} type={type} onInput={onInput} value={value} />
+        <input key="input" id={fieldId} placeholder={placeholder} className={styles.input + ' ' + rounded} style={inputStyle} type={type} onInput={onInput} value={value} />
         {password && <FontAwesomeIcon key="toggle" className={styles.toggle} icon={passwordVisible ? faEyeSlash : faEye} onClick={() => setPasswordVisible(v => !v)} />}
       </div>
       {error && <div className={styles.error}>{error}</div>}
